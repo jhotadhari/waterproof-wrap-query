@@ -1,0 +1,14 @@
+{
+	"name": "waterproof/waterproof-wrap-query",
+	"description": "???",
+	"repositories":
+		[{"type":"package","package":{"name":"jcchavezs/cmb2-taxonomy","version":"0.0.0","source":{"url":"https://github.com/jcchavezs/cmb2-taxonomy.git","type":"git","reference":"master"}}},{"type":"package","package":{"name":"jmarceli/integration-cmb2-qtranslate","version":"0.1.1","source":{"url":"https://github.com/jmarceli/integration-cmb2-qtranslate.git","type":"git","reference":"0.1.1"}}}]
+		,
+	"require":
+		{"composer/installers":"*","webdevstudios/cmb2":"*","jcchavezs/cmb2-taxonomy":"*","jmarceli/integration-cmb2-qtranslate":"*"}
+	,
+	"extra": {
+		"installer-paths": 
+			{"vendor/{$vendor}/{$name}":["webdevstudios/cmb2"]}
+	}
+}

@@ -1,0 +1,99 @@
+
+#cmb2-metabox-wpwq_wrap_desc{
+  
+	.cmb2-metabox-description {
+		font-style: normal;
+		color: #444;
+	}
+	
+  .waterproof-webdesign-logo {
+    display: block;
+    float: right;
+    margin: 1em;
+    height: 120px;
+    width: 120px;
+    img {
+      height: 120px;
+      width: 120px;
+    }
+  }
+  
+  
+	.cmb-row {
+
+    &:after {
+      clear: none;  
+    }
+    
+		&.cmb-type-title {
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+		
+		&.cmb-repeat-group-wrap {
+			border: none;
+			padding: 1.2em 0;
+			margin: 0 auto !important;
+
+			width: 93% !important;
+
+			
+			ul {
+				&.attr > li {
+
+					&:before{
+						content: '> ';
+					}
+				}
+				li {
+
+					padding: 1.1em 0;
+					.required {
+						color: red;
+					}
+					ul {
+
+						li {
+
+							padding: 0 25px;
+							
+
+						}
+
+		
+
+					}		
+
+				}		
+
+			}		
+
+		}
+
+		
+		
+		
+		/*
+		&.cmb-repeat-group-wrap {
+			border: none;
+			padding: 0;
+			margin:  0 0 10px;
+			
+			.cmb-type-title {
+				border: none;
+				padding: 0;
+				margin:  10px 0;			
+			}
+			
+			.cmb-field-list {
+				margin: 6px 0 0;
+			}
+			
+
+			
+		}
+		*/
+		
+	}
+}
