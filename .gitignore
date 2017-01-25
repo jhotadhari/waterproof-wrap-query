@@ -12,6 +12,7 @@
 !.bowerrc
 !composer.json
 !composer.lock
+!README.md
 
 # include dir src
 !/src

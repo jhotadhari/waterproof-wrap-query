@@ -5,17 +5,6 @@
 */
 
 
-/**
-* Wpwq_wrapper_single class
-*
-* Class to initialize a Wpwq_wrapper_single object
-*
-//???
-//* @param	string	$template_type	The type oh header 'single', '404', 'author' ...
-//* @param	Post	$post			The post object
-//* @param	int		$sectioncount	The consecutively number of the section
-*/
-
 
 class Wpwq_wrapper_single {
 

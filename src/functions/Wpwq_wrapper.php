@@ -9,18 +9,9 @@
 	grunt.concat_in_order.require('Wpwq_wrapper_types');
 	grunt.concat_in_order.require('wpwq_wrapper_add_type');
 	grunt.concat_in_order.require('wpwq_get_image_id');
+	grunt.concat_in_order.require('wpwq_options_metabox');
 */
 
-/**
-* Wpwq_wrapper class
-*
-* Class to initialize a Wpwq_wrapper object
-*
-//???
-//* @param	string	$template_type	The type oh header 'single', '404', 'author' ...
-//* @param	Post	$post			The post object
-//* @param	int		$sectioncount	The consecutively number of the section
-*/
 class Wpwq_wrapper {
 
 	protected $type_name = '';
@@ -83,10 +74,8 @@ class Wpwq_wrapper {
 					$obj_image = '';
 					$obj_slug = $obj->post_name;
 					
-					$obj_link = get_permalink( $obj_id ) . '#' . $obj_slug;
-					// $obj_str_title = ___($obj->post_title);
+					$obj_link =  in_array('opt_single_view', wpwq_get_option( 'wpwq_options_metabox' )) && get_post_meta( $obj_id , 'wpwq_opt_has_single', true ) == 'no' ? '' : get_permalink( $obj_id ) ;
 					$obj_str_title = __(get_the_title( $obj_id ));
-					
 					
 					// obj_str_inner
 					if ( array_key_exists('content', $this->args ) && $this->args['content'] == 'none' ){
@@ -112,10 +101,8 @@ class Wpwq_wrapper {
 						} else {
 							$obj_str_inner = ( strlen($content_excerpt) > 0 ? $content_excerpt : $content_full );
 						}
-						
 					}
-					
-					
+
 		
 					$obj_str_link = apply_filters('wpwq_trans_more_information',__( 'More information', 'wpwq'));
 		
@@ -127,31 +114,33 @@ class Wpwq_wrapper {
 
 					break;
 				case 'term':
-					//$obj = get_term( $atts['id'], $atts['taxonomy']);
-					
 					$obj_id = ( gettype($obj) == 'object' ? $obj->term_id : $obj);
 					$obj = get_term($obj_id);
-
+					
+					$term_fields = wpwq_get_option( 'wpwq_term_fields' );
+					
 					$obj_image_url = '';
 
 					$obj_image = '';
-					$obj_link = get_term_link( $obj ) . '#' . $obj->slug;
+					$obj_link = get_term_link( $obj );
 					$obj_slug = $obj->slug;
 					$obj_str_title = __($obj->name);
 					
 					// obj_str_inner
-					$content_type = ( array_key_exists('content', $this->args ) ? $this->args['content'] : 'excerpt' );
+					$content_type = ( array_key_exists('content', $this->args ) 
+						? $this->args['content']
+						: 'excerpt' );
 					
-					$content_full = ( ! empty(get_term_meta($obj_id, '_cmb2_term_basics_desc')) ? get_term_meta($obj_id, '_cmb2_term_basics_desc', true) : '' );
-					$content_full = apply_filters( 'the_content', $content_full );
-
-					$content_full = __($content_full);
-
+					$content_full = in_array( 'desc', $term_fields )
+						&& ! empty(get_term_meta($obj_id, 'wpwq_desc'))
+						? apply_filters( 'the_content', get_term_meta($obj_id, 'wpwq_desc')[0])
+						: apply_filters( 'the_content', term_description($obj->term_id));
 					
-					$content_excerpt = ( ! empty(get_term_meta($obj_id, '_cmb2_term_basics_desc_short')) ? get_term_meta($obj_id, '_cmb2_term_basics_desc_short')[0] : '' );
-					$content_excerpt = apply_filters( 'the_excerpt', $content_excerpt );
-					$content_excerpt = __($content_excerpt );
-					
+					$content_excerpt = in_array( 'desc_short', $term_fields )
+						&& ! empty(get_term_meta($obj_id, 'wpwq_desc_short'))
+						? apply_filters( 'the_content', get_term_meta($obj_id, 'wpwq_desc_short')[0])
+						: '';
+						
 					switch ( $content_type ) { 
 						case 'full':
 							$obj_str_inner = ( strlen($content_full) > 0 ? $content_full : $content_excerpt );
@@ -165,12 +154,15 @@ class Wpwq_wrapper {
 					
 					$obj_str_link = apply_filters('wpwq_trans_more_information',__( 'More information', 'wpwq'));
 					
-					// ???
-					// $term_image = theme_get_term_image($obj_id, 'featured', false);
-					// if ( strlen($term_image) > 0 ) {
-					// 	$obj_image_url = wp_get_attachment_image_src( wpwq_get_image_id($term_image), 'thumbnail')[0];
-					// 	$obj_image = '<img width="150" height="150" class="wp-post-image" src="' . $obj_image_url .'">';
-					// }
+					$term_image = in_array( 'image_featured', $term_fields )
+						&& ! empty(get_term_meta($obj->term_id, 'wpwq_image_featured')) 
+						? get_term_meta($obj->term_id, 'wpwq_image_featured')[0]
+						: '';
+					if ( strlen($term_image) > 0 ) {
+						$obj_image_url = wp_get_attachment_image_src( wpwq_get_image_id($term_image), 'thumbnail')[0];
+						$obj_image = '<img class="wp-post-image" src="' . $obj_image_url .'">';
+					}
+					
 					break;
 				case 'link':
 					$obj_id = $obj->link_id;
@@ -194,7 +186,7 @@ class Wpwq_wrapper {
 					
 					if ( $obj->link_image ) {
 						$obj_image_url = $obj->link_image;
-						$obj_image = '<img width="150" height="150" class="wp-post-image" src="' . $obj_image_url .'">';
+						$obj_image = '<img class="wp-post-image" src="' . $obj_image_url .'">';
 					}
 					
 					break;

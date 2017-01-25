@@ -54,4 +54,10 @@ function wpwq_get_post_types( $return_type = null, $exclude = null){
 	
 }
 
+// wrapper function to use as options_cb
+function wpwq_get_post_types_arr(){
+	 return wpwq_get_post_types( 'array_key_val' );
+}
+
+
 ?>
