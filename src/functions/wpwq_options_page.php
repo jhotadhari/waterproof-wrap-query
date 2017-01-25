@@ -154,6 +154,30 @@ class Wpwq_options_page {
 				'hide_all'     => __( 'Hide for all', 'wpwq' ),
 			),
 		) );
+
+		$cmb->add_field( array(
+			'name' => __('Extra options for single posts', 'wpwq'),
+			'desc' => __('Adds a metabox to post edit screens with extra options for single posts.', 'wpwq'),
+			'id'   => $prefix . 'options_metabox',
+			'type'    => 'multicheck',
+			'options' => array(
+				'opt_single_view' => __( 'Add option to disable single view', 'wpwq' )
+			),
+		) );
+		
+		$cmb->add_field( array(
+			'name' => __('Extra fields for term/category edit screens', 'wpwq'),
+			'desc' => __('The extra fields values will be used for wrap_query shortcode. If no extra fields wanted, the wordpress core ones will be used.', 'wpwq'),
+			'id'   => $prefix . 'term_fields',
+			'type'    => 'multicheck',
+			'options' => array(
+				'desc' => __( 'Description (wysiwyg editor)
+					<p class="cmb2-metabox-description">The original Term description textarea will still be there, but the new description wysiwyg will be used as description in wrap_query shortcodes.</p>', 'wpwq' ),
+				'desc_short' => __( 'Shortdescription (wysiwyg editor)
+					<p class="cmb2-metabox-description">Will be used as description in wrap_query shortcodes.</p>', 'wpwq' ),
+				'image_featured' => __( 'Featured Image.', 'wpwq' )
+			),
+		) ); 
 		
 		$cmb->add_field( array(
 			'name' => __('Display Advertising', 'wpwq'),
@@ -172,7 +196,7 @@ class Wpwq_options_page {
 	}
 	
 	public function enqueue_style( $post_id, $cmb ) {
-		wp_enqueue_style( 'wpwq_options', plugin_dir_url( __FILE__ ) . 'css/wpwq_options.css', false );
+		wp_enqueue_style( 'wpwq_options', plugin_dir_url( __FILE__ ) . 'css/wpwq_options_page.css', false );
 		
 		wp_enqueue_style( 'jquery-ui-style', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', false );
 		

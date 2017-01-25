@@ -97,16 +97,16 @@ module.exports = function(grunt){
 						'local_sync:<%= local_sync.wp_install %>'
 					]
 				},
-				copy_fonts: {
-					files: [
-						'<%= pkg.dirs.src %>/fonts/**/*',
-						'<%= pattern.global_exclude %>',
-					],
-					tasks: [
-						'copy:fonts',
-						'local_sync:<%= local_sync.wp_install %>'
-					]
-				},
+				// copy_fonts: {
+				// 	files: [
+				// 		'<%= pkg.dirs.src %>/fonts/**/*',
+				// 		'<%= pattern.global_exclude %>',
+				// 	],
+				// 	tasks: [
+				// 		'copy:fonts',
+				// 		'local_sync:<%= local_sync.wp_install %>'
+				// 	]
+				// },
 				copy_readme: {
 					files: [
 						'<%= pkg.dirs.src %>/readme/**/*',
@@ -204,7 +204,6 @@ module.exports = function(grunt){
 		rsync: {
 			options: {
 				// args: ["--verbose"],
-				// exclude: [".git*","node_modules"],
 				recursive: true
 			},
 			local_sync: {
@@ -250,20 +249,14 @@ module.exports = function(grunt){
 		},
 		
 		sass:{
-			options: {
-				require: ['susy','breakpoint'],
-				loadPath: require('node-bourbon').includePaths
-			},
 			build: {
 				options: {
 					// style: 'compressed'
 				},
 				files:{
-					// '<%= test_path %>/css/style.css': '<%= pkg.dirs.src %>/sass/style_frontend.scss',
-					// '<%= test_path %>/css/style_admin.css': '<%= pkg.dirs.src %>/sass/style_admin.scss',
-					
 					'<%= test_path %>/css/wpwq_desc_metabox.css': '<%= pkg.dirs.src %>/sass/wpwq_desc_metabox.scss',
-					'<%= test_path %>/css/wpwq_options.css': '<%= pkg.dirs.src %>/sass/wpwq_options.scss'
+					'<%= test_path %>/css/wpwq_options_page.css': '<%= pkg.dirs.src %>/sass/wpwq_options_page.scss',
+					'<%= test_path %>/css/wpwq_options_metabox.css': '<%= pkg.dirs.src %>/sass/wpwq_options_metabox.scss'
 				}
 			},
 			dist: {
@@ -272,11 +265,9 @@ module.exports = function(grunt){
 					style: 'compressed'
 				},
 				files:{
-					// '<%= dist_path %>/css/style.css': '<%= pkg.dirs.src %>/sass/style_frontend.scss',
-					// '<%= dist_path %>/css/style_admin.css': '<%= pkg.dirs.src %>/sass/style_admin.scss',
-					
-					'<%= test_path %>/css/wpwq_desc_metabox.css': '<%= pkg.dirs.src %>/sass/wpwq_desc_metabox.scss',
-					'<%= test_path %>/css/wpwq_options.css': '<%= pkg.dirs.src %>/sass/wpwq_options.scss'
+					'<%= dist_path %>/css/wpwq_desc_metabox.css': '<%= pkg.dirs.src %>/sass/wpwq_desc_metabox.scss',
+					'<%= dist_path %>/css/wpwq_options_page.css': '<%= pkg.dirs.src %>/sass/wpwq_options_page.scss',
+					'<%= dist_path %>/css/wpwq_options_metabox.css': '<%= pkg.dirs.src %>/sass/wpwq_options_metabox.scss'
 				}
 			}
 		},
@@ -342,7 +333,6 @@ module.exports = function(grunt){
 			
 			
 			//	readme to ...
-			// ???
 			readme: {		
 				src: ['<%= pkg.dirs.src %>/readme/dont_touch/_readme.txt'],
 				dest: '<%= test_path %>/readme.txt'
@@ -427,38 +417,26 @@ module.exports = function(grunt){
 						]
 				}
 			},			
-			// sass_custom_modules_frontend: {
-			// 	files: {
-			// 		'<%= pkg.dirs.src %>/sass/custom_modules/frontend/dont_touch/custom_modules.scss': [
-			// 				'<%= pkg.dirs.src %>/sass/custom_modules/frontend/**/*.scss',
-			// 				'!**/dont_touch/**/*.scss',
-			// 				'<%= pattern.global_exclude %>',
-			// 			]
-			// 	}			
-			// },
-			// sass_custom_modules_admin: {
-			// 	files: {
-			// 		'<%= pkg.dirs.src %>/sass/custom_modules/admin/dont_touch/custom_modules.scss': [
-			// 				'<%= pkg.dirs.src %>/sass/custom_modules/admin/**/*.scss',
-			// 				'!**/dont_touch/**/*.scss',
-			// 				'<%= pattern.global_exclude %>',
-			// 			]
-			// 	}			
-			// }
 		},
 			
 		concat: {
 			prepend_to__readme_hist: {
 				options: {
-					banner: 'version <%= pkg.version %>\n<%= global["commit_msg"] %>\n\n'
+					banner: '= <%= pkg.version %> =\n<%= global["commit_msg"] %>\n',
 				},
+
 				src: 'src/readme/dont_touch/_readme_hist.txt',
+
 				dest: 'src/readme/dont_touch/_readme_hist.txt'
+
 			},
+
 			readme_and_hist: {
+
 				options: {
-					banner: '<%= pkg.fullName %>\nversion <%= pkg.version %>\n\n',
-					separator: '\n\nRelease History\n\n'
+
+					banner: '=== <%= pkg.fullName %> ===\nTags: <%= pkg.tags %>\nDonate link: <%= pkg.donateLink %>\nTested up to: <%= pkg.wpVersionTested %>\nStable tag: <%= pkg.wpStableTag%>\nLicense: <%= pkg.license %>\nLicense URI: <%= pkg.licenseUri %>\n\n<%= pkg.description %>!\n',
+					separator: '\n\n== Changelog ==\n\n'
 				},
 				src: [
 					'src/readme/readme.txt',
@@ -573,8 +551,6 @@ module.exports = function(grunt){
 						'concat_in_order:js_admin',
 						'uglify:js_admin',
 						
-						// 'concat_in_order:sass_custom_modules_frontend',
-						// 'concat_in_order:sass_custom_modules_admin',
 						'sass:build',
 
 					// concat functions from src to testingDir
@@ -842,8 +818,6 @@ module.exports = function(grunt){
 						'concat_in_order:js_admin',
 						'uglify:js_admin_dist',						
 						
-						// 'concat_in_order:sass_custom_modules_frontend',
-						// 'concat_in_order:sass_custom_modules_admin',
 						'sass:dist',
 
 					// concat functions from src to dist

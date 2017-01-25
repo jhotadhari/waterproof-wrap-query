@@ -24,6 +24,9 @@ class Wpwq_wrap_query_shortcode {
 	protected $wrapper_args = array();
 	protected $query_args = array();
 	
+	protected $curr_uniques_in_meta_unused = array();
+	
+	
 	function __construct(){
 		$this->shortcode_name = 'wrap_query';
 		$this->init_shortcode_atts();
@@ -33,6 +36,8 @@ class Wpwq_wrap_query_shortcode {
 		add_action( 'cmb2_after_post_form_' . $prefix . 'desc', array( $this, 'desc_metabox_enqueue_style'), 10, 2 );
 		
 		add_shortcode( $this->shortcode_name, array( $this, 'shortcode_function' ) );
+		
+		add_action( 'save_post', array( $this, 'update_post_meta_wpwq_uq'), 80, 3 );
 	}
 	
 	protected function init_shortcode_atts(){
@@ -282,7 +287,10 @@ class Wpwq_wrap_query_shortcode {
 		// fallback ... if query_obj is term and "taxonomy" field is empty, set to "category"
 		if ( $this->shortcode_atts['query_obj']['prop'] == 'term' && ! array_key_exists('taxonomy', $this->query_args) ){
 			$this->query_args['taxonomy'] = 'category';
-		}		
+		}
+		
+		$this->query_args = apply_filters('wpwq_query_args', $this->query_args, $this->shortcode_atts['query_obj']['prop'] );
+		$this->query_args = apply_filters('wpwq_query_args' . $atts['unique'], $this->query_args, $this->shortcode_atts['query_obj']['prop'] );
 		
 	}
 
@@ -294,45 +302,108 @@ class Wpwq_wrap_query_shortcode {
 
 		if ( strlen($atts['unique']) == 0 ) return;
 		
+		if ( is_admin()){
+				$wpwq_uq = (get_post_meta(get_the_ID(), 'wpwq_uq', true) ? get_post_meta(get_the_ID(), 'wpwq_uq', true) : array());
+				$wpwq_uq[$atts['unique']] = array(
+					'unique' => $atts['unique'],
+					'query_obj' => $atts['query_obj'],
+					'query_args' => $this->query_args,
+					'has_link' => $this->wrapper_args['has_link']
+				);
+				update_post_meta(get_the_ID(), 'wpwq_uq', $wpwq_uq);
+			
+		} else {
+			
+			switch ( $atts['query_obj'] ) {
+				case 'post':
+					$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_posts( $this->query_args ));
+					$this->wrapper_args['count_total'] = count($objs);
+					break;
+				case 'term':
+					$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_terms( $this->query_args ));
+					$this->wrapper_args['count_total'] = count($objs);
+					break;
+				case 'link':
+					$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_bookmarks( $this->query_args ));
+					$this->wrapper_args['count_total'] = count($objs);
+					break;
+				default:
+					// silence ...
+			}
+			
+			if ( $atts['debug'] == 'true' ){
+				print('<pre>');
+					print_r('query_args ');
+					print_r($this->query_args);
+					print('<br>');		
+					print_r('wrapper_args ');
+					print_r($this->wrapper_args);
+					print('<br>');		
+				print('</pre>');			
+			}
 		
-		$menu_subs_arr = array();
-		
-		switch ( $atts['query_obj'] ) {
-			case 'post':
-				$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_posts( $this->query_args ));
-				$this->wrapper_args['count_total'] = count($objs);
-				break;
-			case 'term':
-				$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_terms( $this->query_args ));
-				$this->wrapper_args['count_total'] = count($objs);
-				break;
-			case 'link':
-				$objs = apply_filters( 'wpwq_wrapper_objs_' . $atts['unique'], get_bookmarks( $this->query_args ));
-				$this->wrapper_args['count_total'] = count($objs);
-				break;
-			default:
-				// silence ...
+
+			// return the wrapped query
+			return wpwq_get_wrapper( $atts['wrapper'], $atts['query_obj'], $objs, $this->wrapper_args );
+			wp_reset_postdata();
 		}
 		
-		if ( $atts['debug'] == 'true' ){
-			print('<pre>');
-				print_r('query_args ');
-				print_r($this->query_args);
-				print('<br>');		
-				print_r('wrapper_args ');
-				print_r($this->wrapper_args);
-				print('<br>');		
-			print('</pre>');			
-		}
 		
-		// return the wrapped query
-		return wpwq_get_wrapper( $atts['wrapper'], $atts['query_obj'], $objs, $this->wrapper_args );
-		wp_reset_postdata();
+	}
+	
+	public function update_post_meta_wpwq_uq( $post_id, $post, $update ) {
+		
+		// find wrap_query shortcodes in content
+		preg_match_all( "/(\[wrap_query)[^\]]*/", $post->post_content, $matches );
+		if (! $matches ) return;
+		$curr_shortcodes = array_map( function($v){ 
+				return $v . ']';
+			}, ( array_key_exists('0', $matches) ? $matches[0] : array() ));
+		
+		// exec each shortcode and store the uniques in $curr_uniques
+		// during shortcode exec, the unique will be added to the meta
+		$curr_uniques = array();
+		foreach( $curr_shortcodes as $short_code ){
+			do_shortcode($short_code);
+			preg_match_all( "/(unique=')[^']*/", $short_code, $matches );
+			preg_match_all( '/(unique=")[^"]*/', $short_code, $matches_2 );
+			$matches = array_key_exists('0', $matches) ? $matches[0] : array();
+			$matches_2 = array_key_exists('0', $matches_2) ? $matches_2[0] : array();
+			$curr_uniques[] = array_map( function($v){ 
+						$v = str_replace("unique='", '', $v );
+						$v = str_replace('unique="', '', $v );
+						return $v;
+					}, ( array_merge($matches, $matches_2) ));		
+		}
+		$curr_uniques = array_map( function($v){ 
+			return $v[0];
+		}, $curr_uniques);
+		
+		// get the uniques from post meta
+		$wpwq_uq = get_post_meta( $post->ID, 'wpwq_uq', true);
+		$curr_uniques_in_meta = array_map( function($k, $v){
+					return $k;
+				},  array_keys( $wpwq_uq ), $wpwq_uq);	
+		
+		// compare the curr_uniques and the curr_uniques_in_meta 
+		// store the unused meta uniques
+		$this->curr_uniques_in_meta_unused = array_diff( $curr_uniques_in_meta, $curr_uniques );
+		
+		// filter the meta uniques
+		// we only need the uniques taht are in use 
+		$post_meta_uniques_filtered = array_filter($wpwq_uq, function($val, $key) {
+			return ( in_array( $key, $this->curr_uniques_in_meta_unused ) ? false : true );
+		}, ARRAY_FILTER_USE_BOTH);
+		
+		// update post meta with filtered array
+		update_post_meta($post_id, 'wpwq_uq', $post_meta_uniques_filtered);
 		
 	}
 }
 
 
+
+// init shortcode
 function wpwq_init_wrap_query_shortcode(){
 	$wrap_query_shortcode = new Wpwq_wrap_query_shortcode();
 }
@@ -340,6 +411,7 @@ add_action( 'admin_init', 'wpwq_init_wrap_query_shortcode' );
 add_action( 'init', 'wpwq_init_wrap_query_shortcode' );
 
 
+// show_on_cb desc_metabox
 function wpwq_desc_metabox_show_on_cb(){
 	$prefix = 'wpwq_';
 	$display_docs = wpwq_get_option( $prefix . 'display_docs' );
@@ -360,36 +432,8 @@ function wpwq_desc_metabox_show_on_cb(){
 }
 
 
-// // wpwq_remove_unused_uniques       
-// function wpwq_remove_unused_uniques( $post_id ){
-// 	$post = get_post($post_id);
 
-// 	$post_meta_uniques = ( get_post_meta( $post->ID, 'menu_subs', true) ? get_post_meta( $post->ID, 'menu_subs', true ) : null );
-// 	if ( null != $post_meta_uniques ){
-// 		$post_meta_uniques_filtered = array_filter($post_meta_uniques, function($val, $key) {
-// 				global $post;
-				
-// 				preg_match_all( "/(unique=')[^']*/", $post->post_content, $matches );
-// 				$uniques_in_content = array_map( function($v){ 
-// 							return str_replace("unique='", '', $v );
-// 						}, ( array_key_exists('0', $matches) ? $matches[0] : array() ));
-	
-// 				$uniques_in_meta = get_post_meta( $post->ID, 'menu_subs', true);
-// 				$uniques_in_meta = array_map( function($k, $v){
-// 							return $k;
-// 						},  array_keys( $uniques_in_meta ), $uniques_in_meta);						
-				
-// 				$unused_uniques = array_diff( $uniques_in_meta, $uniques_in_content );
-				
-// 				return ( in_array( $key, $unused_uniques ) ? false : true );
-				
-// 			}, ARRAY_FILTER_USE_BOTH);
 
-// 		update_post_meta($post->ID, 'menu_subs', $post_meta_uniques_filtered);
-// 	}
-// } 
-
-// add_action( 'save_post', 'wpwq_remove_unused_uniques', 20, 1 );
 
 
 

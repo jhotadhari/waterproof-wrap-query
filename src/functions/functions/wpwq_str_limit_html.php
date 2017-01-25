@@ -15,7 +15,9 @@
  */
 function wpwq_str_limit_html($value, $limit = 100, $append = '')
 {
-
+	if ( strlen( $value ) == 0 ) {
+		return $value;
+	}
     if (mb_strwidth($value, 'UTF-8') <= $limit) {
         return $value;
     }
@@ -34,6 +36,7 @@ function wpwq_str_limit_html($value, $limit = 100, $append = '')
      
     // Load as HTML ignoring errors
     $dom = new DOMDocument();
+    
     @$dom->loadHTML('<?xml encoding="utf-8" ?>'.$value, LIBXML_HTML_NODEFDTD);
 
     // Fix the html errors

@@ -1,0 +1,26 @@
+.font-initial {
+  color: #444;
+  font-style: normal;
+}
+
+.accordion-wrapper.ui-accordion {
+  margin-bottom: 1em;
+}
+
+.waterproof-webdesign-logo {
+  display: block;
+  float: right;
+  margin: 1em;
+  height: 150px;
+  width: 150px;
+  img {
+    height: 150px;
+    width: 150px;
+  }
+}
+
+.cmb-td {
+  @media (min-width: 600px) {
+    max-width: 60%;
+  }
+}

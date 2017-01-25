@@ -5,7 +5,6 @@
 
 jQuery(document).ready(function($wpwq) {
 	
-	// var container = $wpwq('#cmb2-metabox-wpwq_option_metabox');
 	var elements = $wpwq('.wpwq-wrapper');
 	var classes = [];
 
@@ -23,8 +22,6 @@ jQuery(document).ready(function($wpwq) {
 
 	classes = classes.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
 
-	// console.log( classes );
-	
 	$wpwq.each( classes, function( index, value ){
 		$wpwq('.' + value ).wrapAll( '<div class="accordion-wrapper"><div class="accordion-content"></div></div>' );
 	});
@@ -33,13 +30,11 @@ jQuery(document).ready(function($wpwq) {
 	$wpwq( '.accordion-content' ).each(function() {
 		$wpwq(this).find('h3').first().detach().insertBefore( this );
 	});
-	
-	
 
 	
 	$wpwq( '.accordion-wrapper' ).accordion({
       collapsible: true,
-      // disabled: true
+      active: false
     });
 	
 
