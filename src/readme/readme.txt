@@ -21,7 +21,7 @@ Its basicly documented in the \"Waterproof [wrap_query] shortcode docs\" metabox
 Thanks to CMB2 for their easy metaboxes and optionpages!
 
 == Installation ==
-## Requirements:
+Requirements:
 * php 5.6
 * Any Waterproof wrapper
 
