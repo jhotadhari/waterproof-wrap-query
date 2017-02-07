@@ -51,6 +51,9 @@ class Wpwq_widget_menu extends WP_Widget {
 	 * @var array
 	 */
 	protected $cmb2_fields = array();
+	
+	
+	protected static $atts = array();
 
 	/**
 	 * Contruct widget.
@@ -70,6 +73,8 @@ class Wpwq_widget_menu extends WP_Widget {
 		self::$defaults = array(
 			'title' => '',
 			'post_type' => '',
+			'depth' => '',
+			'steps_hide' => '0',
 			'add_q_args' => '',
 		);
 
@@ -91,6 +96,30 @@ class Wpwq_widget_menu extends WP_Widget {
 				'id'     => 'post_type',
 				'type'   => 'select',
 				'options_cb' => 'wpwq_get_post_types_arr',
+			),
+			
+			array(
+				'name'   => __('Depth','wpwq'),
+				'id_key' => 'depth',
+				'id'     => 'depth',
+				'type'   => 'text',
+				'desc' => __('How many steps this menu should walk? [integer]','wpwq'),
+				'attributes' => array(
+					'type' => 'number',
+					'pattern' => '\d*',
+				)
+			),
+			
+			array(
+				'name'   => __('Hide Steps','wpwq'),
+				'id_key' => 'steps_hide',
+				'id'     => 'steps_hide',
+				'type'   => 'text',
+				'desc' => __('Hide the first steps? How many? [integer]','wpwq'),
+				'attributes' => array(
+					'type' => 'number',
+					'pattern' => '\d*',
+				)
 			),
 			
 			array(
@@ -146,9 +175,10 @@ class Wpwq_widget_menu extends WP_Widget {
 
 		$opt_single_view = in_array( 'opt_single_view', wpwq_get_option( 'wpwq_options_metabox' ));
 		
-		
 		$instance = $atts['instance'];
 		$args = $atts['args'];
+		$depth = $instance['depth'] + 1;
+		$steps_hide = $instance['steps_hide'];
 		
 		// get option post_type
 		$post_type = array_key_exists( 'post_type', $instance) && $instance['post_type'] ? $instance['post_type'] : false;
@@ -182,19 +212,32 @@ class Wpwq_widget_menu extends WP_Widget {
 		if (! $_post_ids ) return;
 		
 		// build list
-		$l = '';
+		$l = '';    
+		$level = 1;
+		if ( $level > $depth ) return;
+		
 		foreach ( $_post_ids as $_post_id ){
 			$_post = get_post($_post_id);
-			$l .= sprintf( '<li><a href="%s"%s>%s</a>%s</li>',
-				get_permalink($_post->ID),
-				( $_post->ID === get_the_ID() ) ? ' class="current"' : '',
-				apply_filters('the_title', $_post->post_title),
-				self::walk_subs( $_post_id, $opt_single_view )
-			);
+			
+			if ( $steps_hide >= $level ){
+				$l .= self::walk_subs( $_post_id, $opt_single_view, $level, $depth, $steps_hide );
+			} else {
+				$l .= sprintf( '<li class="%s"><a href="%s"%s>%s</a>%s</li>',
+					'post-' . $_post->ID,
+					get_permalink($_post->ID),
+					( $_post->ID === get_the_ID() ) ? ' class="current"' : '',
+					apply_filters('the_title', $_post->post_title),
+					self::walk_subs( $_post_id, $opt_single_view, $level, $depth, $steps_hide )
+				);
+			}
 		}
-		$list = self::str_wrap( $l, '<ul>', '</ul>');
+		if ( $steps_hide >= $level ){
+			$list = $l;
+		} else {
+			$list = self::str_wrap( $l, '<ul class="level-' . $level . '">', '</ul>');
+		}
+				
 		if ( strlen( $list ) == 0 ) return;
-				
 		
 		// start widget
 		$widget = '';
@@ -239,12 +282,14 @@ class Wpwq_widget_menu extends WP_Widget {
 		return $query_args;
 	}
 	
-	protected static function walk_subs( $_post_id, $opt_single_view ){
+	protected static function walk_subs( $_post_id, $opt_single_view, $level_from = 0, $depth, $steps_hide ){
 
+		$level = $level_from + 1;
+		if ( $level > $depth ) return;
+		
 		// get uniques
 		$wpwq_uq = get_post_meta( $_post_id, 'wpwq_uq', true);
 		
-
 		$r = '';
 		if (! empty( $wpwq_uq ) ){
 			foreach( $wpwq_uq as $uq ){
@@ -260,16 +305,20 @@ class Wpwq_widget_menu extends WP_Widget {
 						$uq_ids = get_posts( $uq['query_args'] );
 		
 						foreach( $uq_ids as $uq_id ){
-					
 							$uq = get_post($uq_id);
-							
-							$r .= sprintf( '<li><a href="%s"%s>%s</a>%s</li>',
-								get_permalink($uq->ID),
-								( $uq->ID === get_the_ID() ) ? ' class="current"' : '',
-								apply_filters('the_title', $uq->post_title),
-								self::walk_subs( $uq_id, $opt_single_view )
-							);
+							if ( $steps_hide >= $level ){
+								$r .= self::walk_subs( $uq_id, $opt_single_view, $level, $depth, $steps_hide );
+							} else {
+								$r .= sprintf( '<li class="%s" ><a href="%s"%s>%s</a>%s</li>',
+									'post-' . $uq->ID,
+									get_permalink($uq->ID),
+									( $uq->ID === get_the_ID() ) ? ' class="current"' : '',
+									apply_filters('the_title', $uq->post_title),
+									self::walk_subs( $uq_id, $opt_single_view, $level, $depth, $steps_hide )
+								);							
+							}
 						}
+						
 					break;
 					case 'term':
 						$uq_ids = get_terms( $uq['query_args'] );
@@ -290,7 +339,7 @@ class Wpwq_widget_menu extends WP_Widget {
 			}
 		}
 		
-		return self::str_wrap( $r, '<ul>', '</ul>');
+		return self::str_wrap( $r, '<ul class="level-' . $level . '">', '</ul>');
 	}
 	
 	protected static function str_wrap( $str, $open = null, $close = null ){
