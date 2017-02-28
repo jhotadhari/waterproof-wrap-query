@@ -135,6 +135,22 @@ module.exports = function(grunt){
 				// 		'local_sync:<%= local_sync.wp_install %>:<%= local_sync.version %>'
 				// 	]
 				// },
+				
+				js: {
+					files: [
+							'<%= pkg.dirs.src %>/js/**/*.js',
+							'!<%= pkg.dirs.src %>/js/admin/**/*.js',
+							'!<%= pkg.dirs.src %>/js/frontend/**/*.js',
+							'!**/dont_touch/**/*',
+							'<%= pattern.global_exclude %>',
+					],
+					tasks: [
+						'jshint',
+						'uglify:js',
+						'local_sync:<%= local_sync.wp_install %>'
+					]
+				},
+				
 				assets_js_admin: {
 					files: [
 							'<%= pkg.dirs.src %>/js/admin/**/*.js',
@@ -188,17 +204,16 @@ module.exports = function(grunt){
 				
 				
 			// potomo
-				// ???
-				// potomo_pos: {
-				// 	files: [
-				// 		'<%= pkg.dirs.src %>/languages/**/*.po',
-				// 		'<%= pattern.global_exclude %>',
-				// 	],
-				// 	tasks: [
-				// 		'potomo:build',
-				// 		'local_sync:<%= local_sync.wp_install %>'
-				// 	]
-				// }
+				potomo_pos: {
+					files: [
+						'<%= pkg.dirs.src %>/languages/**/*.po',
+						'<%= pattern.global_exclude %>',
+					],
+					tasks: [
+						'potomo:build',
+						'local_sync:<%= local_sync.wp_install %>'
+					]
+				}
 		},
 		
 		
@@ -235,7 +250,22 @@ module.exports = function(grunt){
 		// 		files: {
 		// 				'<%= dist_path %>/js/script.min.js': '<%= pkg.dirs.src %>/js/frontend/dont_touch/_script_frontend.js'
 		// 			}              
-		// 	},	
+		// 	},
+		
+		
+		
+			js: {
+				files: {
+						'<%= test_path %>/js/wpwq_widget.min.js': '<%= pkg.dirs.src %>/js/wpwq_widget.js'
+					}
+			},
+			js_dist: {
+				files: {
+						'<%= dist_path %>/js/wpwq_widget.min.js': '<%= pkg.dirs.src %>/js/wpwq_widget.js'
+					}
+			},
+		
+		
 			js_admin: {
 				files: {
 						'<%= test_path %>/js/script_admin.min.js': '<%= pkg.dirs.src %>/js/admin/dont_touch/_script_admin.js'
@@ -430,7 +460,7 @@ module.exports = function(grunt){
 			},
 			readme_and_hist: {
 				options: {
-					banner: '=== <%= pkg.fullName %> ===\nTags: <%= pkg.tags %>\nDonate link: <%= pkg.donateLink %>\nContributors: <%= pkg.contributors %>\nTested up to: <%= pkg.wpVersionTested %>\nRequires at least: <%= pkg.wpRequiresAtLeast%>\nStable tag: trunk\nLicense: <%= pkg.license %>\nLicense URI: <%= pkg.licenseUri %>\n\n<%= pkg.description %>!\n',
+					banner: '=== <%= pkg.fullName %> ===\nTags: <%= pkg.tags %>\nDonate link: <%= pkg.donateLink %>\nContributors: <%= pkg.contributors %>\nTested up to: <%= pkg.wpVersionTested %>\nRequires at least: <%= pkg.wpRequiresAtLeast%>\nStable tag: trunk\nLicense: <%= pkg.license %>\nLicense URI: <%= pkg.licenseUri %>\n\n<%= pkg.description %>\n',
 					separator: '\n\n== Changelog ==\n\n'
 				},
 				src: [
@@ -443,32 +473,31 @@ module.exports = function(grunt){
 		
 		
 		/*	languages, po to mo */
-		// ???
-		// potomo: {
-		// 	options: {
-		// 		poDel: false
-		// 	},			
-		// 	build: { 
-		// 		files: [{
-		// 			expand: true,
-		// 			cwd: '<%= pkg.dirs.src %>/languages/',
-		// 			src: ['*.po'],
-		// 			dest: '<%= test_path %>/languages',
-		// 			ext: '.mo',
-		// 			nonull: true
-		// 		}]				
-		// 	},
-		// 	dist: { 
-		// 		files: [{
-		// 			expand: true,
-		// 			cwd: '<%= pkg.dirs.src %>/languages/',
-		// 			src: ['*.po'],
-		// 			dest: '<%= dist_path %>/languages',
-		// 			ext: '.mo',
-		// 			nonull: true
-		// 		}]				
-		// 	}
-		// },
+		potomo: {
+			options: {
+				poDel: false
+			},			
+			build: { 
+				files: [{
+					expand: true,
+					cwd: '<%= pkg.dirs.src %>/languages/',
+					src: ['*.po'],
+					dest: '<%= test_path %>/languages',
+					ext: '.mo',
+					nonull: true
+				}]				
+			},
+			dist: { 
+				files: [{
+					expand: true,
+					cwd: '<%= pkg.dirs.src %>/languages/',
+					src: ['*.po'],
+					dest: '<%= dist_path %>/languages',
+					ext: '.mo',
+					nonull: true
+				}]				
+			}
+		},
 		
 		
 		/*	git	*/
@@ -545,6 +574,7 @@ module.exports = function(grunt){
 						// 'uglify:js_frontend',
 						'concat_in_order:js_admin',
 						'uglify:js_admin',
+						'uglify:js',
 						
 						'sass:build',
 
@@ -558,8 +588,7 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						// ???
-						// 'potomo:build',
+						'potomo:build',
 						
 				]);
 			});
@@ -638,12 +667,11 @@ module.exports = function(grunt){
 			if ( version === 'test' ){
 				src = abs_path_pkg + '/' + pkg.dirs.test + '/';
 
-			} else if ( version === 'latest'){
-				src = abs_path_pkg + '/' + pkg.dirs.dist + '/latest/' + pkg.name + '/';
-
+			} else if ( version === 'trunk'){
+				src = abs_path_pkg + '/' + pkg.dirs.dist + '/' + 'trunk' + '/';
 			} else if ( /((\d)\.(\d)\.(\d))/.test(version)){
-				src = abs_path_pkg + '/' + pkg.dirs.dist + '/' + pkg.name + '_v' + version + '/' + pkg.name + '/';
-
+				src = abs_path_pkg + '/' + pkg.dirs.dist + '/tags/' + version + '/';
+				
 				if (! grunt.file.exists(src)){
 					grunt.warn('"' + version + '" is no valid version');
 				}
@@ -770,8 +798,8 @@ module.exports = function(grunt){
 				grunt.log.writeln('dist version: ' + pkg.version);
 				
 				var dist_path = [
-					pkg.dirs.dist + '/' + pkg.name + '_v' + pkg.version + '/' + pkg.name,
-					pkg.dirs.dist + '/' + 'latest/' + pkg.name
+					pkg.dirs.dist + '/tags/' + pkg.version,
+					pkg.dirs.dist + '/' + 'trunk'
 				];
 				
 				// run tasks
@@ -811,7 +839,8 @@ module.exports = function(grunt){
 						// 'concat_in_order:js_frontend',
 						// 'uglify:js_frontend_dist',
 						'concat_in_order:js_admin',
-						'uglify:js_admin_dist',						
+						'uglify:js_admin_dist',		
+						'uglify:js_dist',
 						
 						'sass:dist',
 
@@ -824,8 +853,7 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						// ???
-						// 'potomo:dist',
+						'potomo:dist',
 					
 				]);
 				

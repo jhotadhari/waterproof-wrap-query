@@ -264,6 +264,15 @@ class Wpwq_wrap_query_shortcode {
 			}
 		}
 		
+
+		// exchange recursive in $this->query_args: 'true'/'false' with bool
+		$query_args = $this->query_args;
+		array_walk_recursive ( $query_args , function( &$val, $key ){
+			$val = ( $val === 'true' ) ? true : $val;
+			$val = ( $val === 'false' ) ? false : $val;
+		});
+		$this->query_args = $query_args;
+		
 		// exchange recursive 'this__'$s in $this->query_args with $GLOBALS['post']->$s
 		$query_args = $this->query_args;
 		array_walk_recursive ( $query_args , function( &$val, $key ){

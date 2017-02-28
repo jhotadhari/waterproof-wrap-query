@@ -10,10 +10,10 @@ function wpwq_load_textdomain(){
 	load_plugin_textdomain(
 		'wpwq',
 		false,
-		dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+		dirname( plugin_basename( __FILE__ ) ) . '/languages'
 	);
 }
-add_action( 'plugins_loaded', 'wpwq_load_textdomain' );
+add_action( 'init', 'wpwq_load_textdomain' );
 
 
 

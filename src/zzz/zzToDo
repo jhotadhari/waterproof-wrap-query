@@ -1,8 +1,12 @@
 
 
-widget
-	add depth
-	
 	
 terms
 	cloumns
+	
+add style to widget
+	kass_wpwq_menu_widget.scss
+	
+	
+widget
+	does the terms thing works properly?

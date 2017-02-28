@@ -25,9 +25,9 @@ function wpwq_single_add_column_column_content( $column, $post_id ) {
 				default :	// yes
 					$content = '<span style="font-size: large;">&#x2713</style>';
 			}
+			echo $content;
 			break;
-	}		
-	echo $content;
+	}
 }
 
 // loop post_types and hook/filter for each
