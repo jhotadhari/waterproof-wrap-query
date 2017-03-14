@@ -392,16 +392,16 @@ class Wpwq_wrap_query_shortcode {
 		$wpwq_uq = get_post_meta( $post->ID, 'wpwq_uq', true);
 		$curr_uniques_in_meta = array_map( function($k, $v){
 					return $k;
-				},  array_keys( $wpwq_uq ), $wpwq_uq);	
+				},  (array) array_keys( $wpwq_uq ), $wpwq_uq);	
 		
 		// compare the curr_uniques and the curr_uniques_in_meta 
 		// store the unused meta uniques
-		$this->curr_uniques_in_meta_unused = array_diff( $curr_uniques_in_meta, $curr_uniques );
+		$this->curr_uniques_in_meta_unused = array_diff( (array) $curr_uniques_in_meta, $curr_uniques );
 		
 		// filter the meta uniques
 		// we only need the uniques taht are in use 
-		$post_meta_uniques_filtered = array_filter($wpwq_uq, function($val, $key) {
-			return ( in_array( $key, $this->curr_uniques_in_meta_unused ) ? false : true );
+		$post_meta_uniques_filtered = array_filter( (array) $wpwq_uq, function($val, $key) {
+			return ( in_array( $key, (array) $this->curr_uniques_in_meta_unused ) ? false : true );
 		}, ARRAY_FILTER_USE_BOTH);
 		
 		// update post meta with filtered array
