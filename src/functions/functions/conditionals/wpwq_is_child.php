@@ -6,23 +6,20 @@
                                       
 */
 
-function wpwq_is_child( $pid ) {
-	if (! $pid ) return false;
-	if ( is_page() ) return false;
+function wpwq_is_child( $parent_id, $object_type = 'post', $resource_type = 'post_type') {
+	if (! $parent_id ) return false;
+	
 	global $post;
 	if (! $post ) return false;
 	
-	if (! is_numeric($pid) ) {
-		$pid = wpwq_get_post_by_slug( $pid, 'id' );
-	}
+	if (! is_numeric($parent_id) )
+		$parent_id = wpwq_get_post_by_slug( $parent_id, 'id' )->ID;
 	
-	$ancestors = get_post_ancestors( $post->$pid );
+	$ancestors = get_ancestors( $post->ID, $object_type, $resource_type );
+
 	
-	if( in_array( $pid, $ancestors )) {
-		return true;
-	} else {
-		return false;
-	}
+	return in_array( $parent_id, $ancestors );
 };
+
 
 ?>

@@ -1,3 +1,5 @@
 {
   "1": "bug fix: extract_shortcode_atts method, query_args property, exchange 'true'/'false' with boolen value"
+  "2": "js: init the widget hover stuff on ajax complete"
+  "3": "menu widget: added kind of support for terms"
 }
