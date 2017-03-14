@@ -3,6 +3,10 @@
 	grunt.concat_in_order.declare('init');
 */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 // load_plugin_textdomain
 function wpwq_load_textdomain(){
