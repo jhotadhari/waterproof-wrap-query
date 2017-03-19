@@ -509,9 +509,15 @@ module.exports = function(grunt){
 			},
 			commit: {
 				options: {
-					m: 'version <%= pkg.version %>\n\n<%= commit_msg %>'
+					m: 'v<%= pkg.version %>\n\n<%= commit_msg %>'
 				}
-			}
+			},	
+			tag: {
+				options: {
+					a: ['v<%= pkg.version %>'],
+					m: ['<%= commit_msg %>']
+				}
+			},
 		},
 		
 		
@@ -588,7 +594,8 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						'potomo:build',
+						'_pot',
+						'_potomo:dist',
 						
 				]);
 			});
@@ -853,11 +860,39 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						'potomo:dist',
+						'_pot',
+						'_potomo:dist',
 					
 				]);
 				
 			});
+			
+		// _potomo
+		grunt.registerTask('_potomo', 'sub task', function( _task ) {
+		
+				if ( ! _task) {
+					var _task = 'build';
+				}
+				
+				var dir = grunt.config.get('potomo')[_task].files[0].cwd;
+				var filePattern = grunt.config.get('potomo')[_task].files[0].src[0];
+				
+				if ( grunt.file.expand( dir + '**/' + filePattern ).length ) {
+					grunt.task.run(['potomo:' + _task ]);
+				}
+				
+		});
+		
+		// _pot
+		grunt.registerTask('_pot', 'sub task', function() {
+			var dir = grunt.config.get('potomo').build.files[0].cwd;
+			
+			if( grunt.file.expand( dir ).length === 0 ){
+				grunt.file.mkdir( dir )
+			}	
+			
+			grunt.task.run(['pot']);
+		});
 			
 		// _dist_git_tasks
 			grunt.registerTask('_dist_git_tasks', 'sub task', function() {
@@ -865,6 +900,7 @@ module.exports = function(grunt){
 				grunt.task.run([
 					'git:add',
 					'git:commit',
+					'git:tag',
 				]);
 
 			});

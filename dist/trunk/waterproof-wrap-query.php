@@ -3,7 +3,7 @@
 Plugin Name: Waterproof Wrap Query
 Plugin URI: http://waterproof-webdesign.info/plugins/waterproof-wrap-query
 Description: Wrap your posts or terms in something fancy!
-Version: 0.0.2
+Version: 0.0.3
 Author: jhotadhari
 Author URI: http://waterproof-webdesign.info/
 License: GNU General Public License v2

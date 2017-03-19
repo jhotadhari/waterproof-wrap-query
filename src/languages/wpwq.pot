@@ -1,0 +1,381 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the waterproof-wrap-query package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: waterproof-wrap-query 0.0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-19 17:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/functions/functions/wpwq_get_post_types.php:33
+msgid "Post"
+msgstr ""
+
+#: src/functions/functions/wpwq_get_post_types.php:34
+msgid "Page"
+msgstr ""
+
+#: src/functions/functions/wpwq_render_row_cb.php:21
+msgid "No Wrappers installed"
+msgstr ""
+
+#: src/functions/functions/wpwq_render_row_cb.php:21
+#, php-format
+msgid ""
+"Check the <a title=\"WordPress Plugin Repository\" target=\"_blank\" href="
+"\"%s\">WordPress Plugin Repository</a> for Waterproof Wrapper Plugins."
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:20
+msgid "Wpwq Options"
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:31
+msgid ""
+"Metabox added by <a title=\"Settings -> Waterproof Wrap Query Plugin\" "
+"target=\"_blank\" href=\""
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:35
+msgid "Has Single"
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:38
+msgid ""
+"Is this posty thing viewable as single? If not, user will be redirected to "
+"parent page or home. But this post can still be used for listings."
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:41
+msgid "Yes"
+msgstr ""
+
+#: src/functions/single/wpwq_options_metabox.php:42
+msgid "No"
+msgstr ""
+
+#: src/functions/single/wpwq_single_add_column.php:11
+msgid "Has single view?"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:63
+msgid "Waterproof Wrap Query"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:145
+msgid "Display shortcode docs"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:146
+msgid ""
+"Display the \"Waterproof [wrap_query] shortcode docs\" Metabox on post edit "
+"screens?"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:152
+msgid "Display for all"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:153
+msgid "Display for admin only"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:154
+msgid "Hide for all"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:159
+msgid "Extra options for single posts"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:160
+msgid ""
+"Adds a metabox to post edit screens with extra options for single posts."
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:164
+msgid "Add option to disable single view"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:169
+msgid "Extra fields for term/category edit screens"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:170
+msgid ""
+"The extra fields values will be used for wrap_query shortcode. If no extra "
+"fields wanted, the wordpress core ones will be used."
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:174
+msgid ""
+"Description (wysiwyg editor)\r\n"
+"\t\t\t\t\t<p class=\"cmb2-metabox-description\">The original Term "
+"description textarea will still be there, but the new description wysiwyg "
+"will be used as description in wrap_query shortcodes.</p>"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:176
+msgid ""
+"Shortdescription (wysiwyg editor)\r\n"
+"\t\t\t\t\t<p class=\"cmb2-metabox-description\">Will be used as description "
+"in wrap_query shortcodes.</p>"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:178
+msgid "Featured Image."
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:183
+msgid "Display Advertising"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:184
+msgid ""
+"I don't like advertising. Do you want to see the Waterproof-Webdesign ads "
+"here and there in backend?"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:189
+msgid "yes"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:190
+msgid "no"
+msgstr ""
+
+#: src/functions/wpwq_options_page.php:221
+msgid "Settings updated."
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:22
+#: src/functions/Wpwq_wrap_query_shortcode.php:96
+msgid "Description"
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:24
+#: src/functions/wpwq_term_edit_fields.php:40
+#: src/functions/wpwq_term_edit_fields.php:56
+msgid ""
+"Field added by <a title=\"Settings -> Waterproof Wrap Query Plugin\" target="
+"\"_blank\" href=\""
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:26
+msgid ""
+"Description will be used in some waterproof wrappers but but other wordpress "
+"functions and plugins will still use the standard term description."
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:28
+#: src/functions/wpwq_term_edit_fields.php:44
+msgid "Use language tags for multilanguage"
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:38
+msgid "Shortdescription"
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:42
+msgid "Shortdescription will be used in some waterproof wrappers."
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:54
+msgid "Featured Image"
+msgstr ""
+
+#: src/functions/wpwq_term_edit_fields.php:58
+msgid "Featured Image will be used in some waterproof wrappers."
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:65
+msgid "Waterproof Widget Menu"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:69
+msgid "A menu based on \"wrap_query\" shortcode."
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:83
+msgid "Title"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:94
+msgid "Post Type"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:103
+msgid "Depth"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:107
+msgid "How many steps this menu should walk? [integer]"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:115
+msgid "Hide Steps"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:119
+msgid "Hide the first steps? How many? [integer]"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:127
+msgid "Additional query arguments"
+msgstr ""
+
+#: src/functions/Wpwq_widget_menu.php:128
+msgid ""
+"Accepts an JSON formated array to set/change args for get_posts function.<br>"
+"\r\n"
+"\t\t\t\t\tExample to include by id: {\"include\":\"17,18\"}<br>\r\n"
+"\t\t\t\t\tExample to include only top posts: {\"post_parent\":\"0\"}"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:48
+msgid ""
+"<span class=\"required\">required!</span> Unique identifier. Just some kind "
+"of simple string. Please no special signs"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:53
+msgid "type of queried object"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:58
+msgid ""
+"<span class=\"required\">required!</span> A JSON formatted get_posts($args) "
+"arguments array"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:63
+msgid "<span class=\"required\">required!</span> Name of the wrapper."
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:68
+msgid ""
+"<span class=\"required\">required!</span> A JSON formatted properties array "
+"for the wrapper object"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:73
+msgid "Just for debugging. Will output the query_args and wrapper_args"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:90
+msgid "Accepts"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:93
+msgid "Default"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:118
+msgid "Waterproof [wrap_query] shortcode docs"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:140
+msgid ""
+"Place a [wrap_query] shortcode somewhere inside the content. It will query "
+"the database, wraps each result in something fancy and pastes the listing in "
+"the content.<br>"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:146
+msgid ""
+"The \"query_obj\" attribute specifies the type of queried object. It accepts "
+"\"post\"|\"term\"|\"link.\""
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:152
+msgid ""
+"The \"wrapper_args\" attribute accepts an JSON formatted array, holding the "
+"parameters to fetch posts using the functions: \"get_posts()\", "
+"\"get_terms()\" and \"get_bookmarks()\".<br>\r\n"
+"\t\t\tCheck <a title=\"Class Reference/WP Query\" target=\"_blank\" href="
+"\"https://codex.wordpress.org/Class_Reference/WP_Query#Parameters\">the "
+"parameters section</a> of the \"WP_Query class\" documentation and <a title="
+"\"Template Tags/get posts\" target=\"_blank\" href=\"https://codex.wordpress."
+"org/Template_Tags/get_posts#Parameters\">the parameters section</a> of the "
+"\"get_posts Template Tag\" documentation for a list of parameters.<br>\r\n"
+"\t\t\tAddittionaly it accepts \"this__\" (double underscore) as a part of "
+"value to refeer to the current post object (exp: use \"this__ID\" to refeer "
+"to the current posts ID )."
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:160
+msgid "Full example with bxslider wrapper:"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:180
+msgid ""
+"\r\n"
+"\t\t\t\tExample usage for the \"query_args\" attribute: You want to query 10 "
+"posts of the current posts post_type? Paste this attribute in the "
+"[wrap_query] shortcode:<br>\r\n"
+"\t\t\t\tquery_args='{\"post_type\":\"this__post_type\",\"posts_per_page\":"
+"\"10\"}'"
+msgstr ""
+
+#: src/functions/Wpwq_wrap_query_shortcode.php:194
+msgid ""
+"Wrappers are configured with the \"wrapper_args\" shortcode attribute.<br>"
+"\r\n"
+"\t\t\t\t\"Wrapper_args\" accepts an JSON formatted array.<br>\r\n"
+"\t\t\t\tAll wrappers share the \"arguments for all\" and have some "
+"additional arguments.<br>\r\n"
+"\t\t\t\tThis are all available wrappers:"
+msgstr ""
+
+#: src/functions/wpwq_wrapper_add_type.php:15
+msgid ""
+"Following arguments will work with all wrappers.<br><br>\r\n"
+"\t\t\t\tExample: You want to strip all tags and shortcodes from the content "
+"and limit it to 55 characters? Paste this attribute in the [wrap_query] "
+"shortcode:<br>\r\n"
+"\t\t\t\twrapper_args='{\"content_strip\":\"full\",\"content_limit\":\"55\"}'"
+msgstr ""
+
+#: src/functions/wpwq_wrapper_add_type.php:22
+msgid "set by class"
+msgstr ""
+
+#: src/functions/wpwq_wrapper_add_type.php:27
+msgid "Whats the content?"
+msgstr ""
+
+#: src/functions/wpwq_wrapper_add_type.php:32
+msgid ""
+"Accepts a string with comma seperated values: , \"none\", \"shortcodes\", "
+"\"style\", \"tags\".<br>\r\n"
+"\t\t\t\t\t\tOr a string with sinlge value \"full\" to strip all three.<br>"
+"\r\n"
+"\t\t\t\t\t\tNotice: Even when unstripped (\"none\"), the [wrap_query] "
+"shortcode will be stripped."
+msgstr ""
+
+#: src/functions/wpwq_wrapper_add_type.php:39
+msgid ""
+"Number of characters in content. HTML tags will not be counted and the HTML "
+"Structure will be preserved."
+msgstr ""
+
+#: src/functions/Wpwq_wrapper.php:107 src/functions/Wpwq_wrapper.php:155
+#: src/functions/Wpwq_wrapper.php:185
+msgid "More information"
+msgstr ""
+
+#: src/plugin_main_file/init.php:39
+#, php-format
+msgid "\"%s\" plugin requires PHP version greater %s!"
+msgstr ""
