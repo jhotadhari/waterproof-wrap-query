@@ -1003,15 +1003,17 @@ class Wpwq_widget_menu extends WP_Widget {
 	
 	protected static function is_current( $_obj, $parent ){
 		if ( gettype( $_obj ) !== 'object' ) return false;
+		$queried_object = get_queried_object();
+		if ( gettype( $queried_object ) !== 'object' ) return false;
 		
-		$is_current = false;
-		
-		if ( property_exists( get_queried_object() , 'ID' ) && isset( get_queried_object()->ID ) ){
-			$current_id = apply_filters('wpwq_widget_current_id', get_queried_object()->ID );
+		if ( property_exists( $queried_object , 'ID' ) && isset( $queried_object->ID ) ){
+			$current_id = apply_filters('wpwq_widget_current_id', $queried_object->ID );
 			$is_current = $_obj->ID === $current_id;
-		} elseif ( property_exists( get_queried_object() , 'term_id' ) && isset( get_queried_object()->term_id ) ){
-			$current_id = apply_filters('wpwq_widget_current_id', get_queried_object()->term_id );
+		} elseif ( property_exists( $queried_object , 'term_id' ) && isset( $queried_object->term_id ) ){
+			$current_id = apply_filters('wpwq_widget_current_id', $queried_object->term_id );
 			$is_current = $_obj->term_id === $current_id || wpwq_term_is_child( $_obj->term_id, $parent['query_args']['taxonomy'] );
+		} else {
+			$is_current = false;
 		}
 		
 		return $is_current;
@@ -2302,8 +2304,13 @@ class Wpwq_wrap_query_shortcode {
 	
 	public function update_post_meta_wpwq_uq( $post_id, $post, $update ) {
 		
+		$post_content_raw = $post->post_content;
+		
+		if ( empty( $post_content_raw ) )
+			return;
+		
 		// find wrap_query shortcodes in content
-		preg_match_all( "/(\[wrap_query)[^\]]*/", $post->post_content, $matches );
+		preg_match_all( "/(\[wrap_query)[^\]]*/", $post_content_raw, $matches );
 		if (! $matches ) return;
 		$curr_shortcodes = array_map( function($v){ 
 				return $v . ']';
@@ -2330,19 +2337,27 @@ class Wpwq_wrap_query_shortcode {
 		
 		// get the uniques from post meta
 		$wpwq_uq = get_post_meta( $post->ID, 'wpwq_uq', true);
-		$curr_uniques_in_meta = array_map( function($k, $v){
-					return $k;
-				},  (array) array_keys( $wpwq_uq ), $wpwq_uq);	
 		
-		// compare the curr_uniques and the curr_uniques_in_meta 
-		// store the unused meta uniques
-		$this->curr_uniques_in_meta_unused = array_diff( (array) $curr_uniques_in_meta, $curr_uniques );
+		if ( ! empty( $wpwq_uq ) ) {
 		
-		// filter the meta uniques
-		// we only need the uniques taht are in use 
-		$post_meta_uniques_filtered = array_filter( (array) $wpwq_uq, function($val, $key) {
-			return ( in_array( $key, (array) $this->curr_uniques_in_meta_unused ) ? false : true );
-		}, ARRAY_FILTER_USE_BOTH);
+			$curr_uniques_in_meta = array_map( function($k, $v){
+						return $k;
+					},  (array) array_keys( $wpwq_uq ), $wpwq_uq);	
+			
+			// compare the curr_uniques and the curr_uniques_in_meta 
+			// store the unused meta uniques
+			$this->curr_uniques_in_meta_unused = array_diff( (array) $curr_uniques_in_meta, $curr_uniques );
+			
+			// filter the meta uniques
+			// we only need the uniques taht are in use 
+			$post_meta_uniques_filtered = array_filter( (array) $wpwq_uq, function($val, $key) {
+				return ( in_array( $key, (array) $this->curr_uniques_in_meta_unused ) ? false : true );
+			}, ARRAY_FILTER_USE_BOTH);			
+		
+		} else {
+			$post_meta_uniques_filtered = $curr_uniques;
+		
+		}
 		
 		// update post meta with filtered array
 		update_post_meta($post_id, 'wpwq_uq', $post_meta_uniques_filtered);

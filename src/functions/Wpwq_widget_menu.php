@@ -453,15 +453,17 @@ class Wpwq_widget_menu extends WP_Widget {
 	
 	protected static function is_current( $_obj, $parent ){
 		if ( gettype( $_obj ) !== 'object' ) return false;
+		$queried_object = get_queried_object();
+		if ( gettype( $queried_object ) !== 'object' ) return false;
 		
-		$is_current = false;
-		
-		if ( property_exists( get_queried_object() , 'ID' ) && isset( get_queried_object()->ID ) ){
-			$current_id = apply_filters('wpwq_widget_current_id', get_queried_object()->ID );
+		if ( property_exists( $queried_object , 'ID' ) && isset( $queried_object->ID ) ){
+			$current_id = apply_filters('wpwq_widget_current_id', $queried_object->ID );
 			$is_current = $_obj->ID === $current_id;
-		} elseif ( property_exists( get_queried_object() , 'term_id' ) && isset( get_queried_object()->term_id ) ){
-			$current_id = apply_filters('wpwq_widget_current_id', get_queried_object()->term_id );
+		} elseif ( property_exists( $queried_object , 'term_id' ) && isset( $queried_object->term_id ) ){
+			$current_id = apply_filters('wpwq_widget_current_id', $queried_object->term_id );
 			$is_current = $_obj->term_id === $current_id || wpwq_term_is_child( $_obj->term_id, $parent['query_args']['taxonomy'] );
+		} else {
+			$is_current = false;
 		}
 		
 		return $is_current;

@@ -5,7 +5,7 @@
   "uri": "http://waterproof-webdesign.info/plugins/waterproof-wrap-query",
   "textDomain": "wpwq",
   "domainPath": "/languages",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Wrap your posts or terms in something fancy!",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "licenseUri": "http://www.gnu.org/licenses/gpl-2.0.html",
   "tags": "shortcode,wrapper,widget,get_posts,get_terms,lists,listing",
   "donateLink": "http://waterproof-webdesign.info/donate",
-  "wpVersionTested": "4.7.2",
+  "wpVersionTested": "4.9.2",
   "wpRequiresAtLeast": "4.7",
   "devDependencies": {
     "grunt": "^1.0.1",

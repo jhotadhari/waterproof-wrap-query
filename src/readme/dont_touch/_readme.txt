@@ -2,7 +2,7 @@
 Tags: shortcode,wrapper,widget,get_posts,get_terms,lists,listing
 Donate link: http://waterproof-webdesign.info/donate
 Contributors: jhotadhari
-Tested up to: 4.7.2
+Tested up to: 4.9.2
 Requires at least: 4.7
 Stable tag: trunk
 License: GNU General Public License v2
@@ -50,6 +50,9 @@ Upload and install this Plugin in the same way you'd install any other plugin.
 3. Edit page screen: "Waterproof [wrap_query] shortcode docs" metabox and "Wpwq Options" metabox
 
 == Changelog ==
+
+= 0.0.4 =
+fixes
 
 = 0.0.3 =
 bug fix: extract_shortcode_atts method, query_args property, exchange 'true'/'false' with boolen value
